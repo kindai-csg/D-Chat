@@ -1,0 +1,21 @@
+version: '2'
+services:
+  nginx:
+    image: nginx:1.17
+    container_name: dchat-nginx
+    ports:
+      - "8170:80"
+    volumes:
+      - "./nginx_config:/etc/nginx/conf.d/"
+    depends_on: 
+      - server 
+  server:
+    build: ./docker/golang
+    container_name: dchat-server
+    working_dir: "/.go/src/github.com/kindai-csg/D-Chat/"
+    command: bash
+    ports:
+      - "8180:3000"
+    volumes:
+      - "./server:/.go/src/github.com/kindai-csg/D-Chat/"
+    tty: true
