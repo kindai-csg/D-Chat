@@ -8,11 +8,12 @@ const (
 )
 
 type User struct {
-	Id       string
-	Name     string
-	Password string
-	Mail     string
-	Profile  string
-	Status   string
-	Auth     AuthType
+	Id         string
+	Name       string
+	Password   string
+	Mail       string
+	Bio        string
+	Status     string
+	StatusText string
+	Auth       AuthType
 }
