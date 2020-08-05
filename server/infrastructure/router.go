@@ -7,6 +7,11 @@ import (
 var Router *gin.Engine
 
 func init() {
+	_, err := NewMongoHandler()
+	if err != nil {
+		panic(err)
+	}
+
 	router := gin.Default()
 
 	router.GET("/", func(c *gin.Context) {
