@@ -9,6 +9,7 @@ const (
 
 type User struct {
 	Id         string
+	UserId     string
 	Name       string
 	Password   string
 	Mail       string
