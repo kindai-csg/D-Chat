@@ -33,90 +33,90 @@ func (m *MockUserRepository) EXPECT() *MockUserRepositoryMockRecorder {
 	return m.recorder
 }
 
-// StoreUser mocks base method.
-func (m *MockUserRepository) StoreUser(arg0 domain.User) (domain.User, error) {
+// Create mocks base method.
+func (m *MockUserRepository) Create(arg0 domain.User) (domain.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "StoreUser", arg0)
+	ret := m.ctrl.Call(m, "Create", arg0)
 	ret0, _ := ret[0].(domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// StoreUser indicates an expected call of StoreUser.
-func (mr *MockUserRepositoryMockRecorder) StoreUser(arg0 interface{}) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockUserRepositoryMockRecorder) Create(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StoreUser", reflect.TypeOf((*MockUserRepository)(nil).StoreUser), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserRepository)(nil).Create), arg0)
 }
 
-// UpdateUser mocks base method.
-func (m *MockUserRepository) UpdateUser(arg0 domain.User) (domain.User, error) {
+// Update mocks base method.
+func (m *MockUserRepository) Update(arg0 domain.User) (domain.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateUser", arg0)
+	ret := m.ctrl.Call(m, "Update", arg0)
 	ret0, _ := ret[0].(domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UpdateUser indicates an expected call of UpdateUser.
-func (mr *MockUserRepositoryMockRecorder) UpdateUser(arg0 interface{}) *gomock.Call {
+// Update indicates an expected call of Update.
+func (mr *MockUserRepositoryMockRecorder) Update(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUser", reflect.TypeOf((*MockUserRepository)(nil).UpdateUser), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserRepository)(nil).Update), arg0)
 }
 
-// DeleteUser mocks base method.
-func (m *MockUserRepository) DeleteUser(arg0 string) error {
+// Delete mocks base method.
+func (m *MockUserRepository) Delete(arg0 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteUser", arg0)
+	ret := m.ctrl.Call(m, "Delete", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// DeleteUser indicates an expected call of DeleteUser.
-func (mr *MockUserRepositoryMockRecorder) DeleteUser(arg0 interface{}) *gomock.Call {
+// Delete indicates an expected call of Delete.
+func (mr *MockUserRepositoryMockRecorder) Delete(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockUserRepository)(nil).DeleteUser), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUserRepository)(nil).Delete), arg0)
 }
 
-// GetAllUsers mocks base method.
-func (m *MockUserRepository) GetAllUsers() ([]domain.User, error) {
+// GetAll mocks base method.
+func (m *MockUserRepository) GetAll() ([]domain.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllUsers")
+	ret := m.ctrl.Call(m, "GetAll")
 	ret0, _ := ret[0].([]domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetAllUsers indicates an expected call of GetAllUsers.
-func (mr *MockUserRepositoryMockRecorder) GetAllUsers() *gomock.Call {
+// GetAll indicates an expected call of GetAll.
+func (mr *MockUserRepositoryMockRecorder) GetAll() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockUserRepository)(nil).GetAllUsers))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockUserRepository)(nil).GetAll))
 }
 
-// FindUserById mocks base method.
-func (m *MockUserRepository) FindUserById(arg0 string) (domain.User, error) {
+// FindById mocks base method.
+func (m *MockUserRepository) FindById(arg0 string) (domain.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindUserById", arg0)
+	ret := m.ctrl.Call(m, "FindById", arg0)
 	ret0, _ := ret[0].(domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindUserById indicates an expected call of FindUserById.
-func (mr *MockUserRepositoryMockRecorder) FindUserById(arg0 interface{}) *gomock.Call {
+// FindById indicates an expected call of FindById.
+func (mr *MockUserRepositoryMockRecorder) FindById(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUserById", reflect.TypeOf((*MockUserRepository)(nil).FindUserById), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockUserRepository)(nil).FindById), arg0)
 }
 
-// AuthenticateUser mocks base method.
-func (m *MockUserRepository) AuthenticateUser(arg0 domain.User) error {
+// Authenticate mocks base method.
+func (m *MockUserRepository) Authenticate(arg0 domain.User) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AuthenticateUser", arg0)
+	ret := m.ctrl.Call(m, "Authenticate", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// AuthenticateUser indicates an expected call of AuthenticateUser.
-func (mr *MockUserRepositoryMockRecorder) AuthenticateUser(arg0 interface{}) *gomock.Call {
+// Authenticate indicates an expected call of Authenticate.
+func (mr *MockUserRepositoryMockRecorder) Authenticate(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthenticateUser", reflect.TypeOf((*MockUserRepository)(nil).AuthenticateUser), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticate", reflect.TypeOf((*MockUserRepository)(nil).Authenticate), arg0)
 }

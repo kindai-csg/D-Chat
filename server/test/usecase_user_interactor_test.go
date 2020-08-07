@@ -17,14 +17,14 @@ func TestAddNewUser(t *testing.T) {
 	interactor := usecase.NewUserInteractor(userRepository)
 
 	user := domain.User{}
-	userRepository.EXPECT().StoreUser(user).Return(user, errors.New(""))
+	userRepository.EXPECT().Create(user).Return(user, errors.New(""))
 	_, err := interactor.AddNewUser(user)
 	if err == nil {
 		t.Errorf("Expectation: return error")
 	}
 
 	user = domain.User{Password: "test"}
-	userRepository.EXPECT().StoreUser(user).Return(user, nil)
+	userRepository.EXPECT().Create(user).Return(user, nil)
 	rUser, err := interactor.AddNewUser(user)
 	if err != nil {
 		t.Errorf("Expectation: return nil")
@@ -41,12 +41,12 @@ func TestDeleteUser(t *testing.T) {
 	interactor := usecase.NewUserInteractor(userRepository)
 
 	user := domain.User{Id: "test"}
-	userRepository.EXPECT().DeleteUser(user.Id).Return(nil)
+	userRepository.EXPECT().Delete(user.Id).Return(nil)
 	err := interactor.DeleteUser(user)
 	if err != nil {
 		t.Errorf("Expectation: return nil")
 	}
-	userRepository.EXPECT().DeleteUser(user.Id).Return(errors.New(""))
+	userRepository.EXPECT().Delete(user.Id).Return(errors.New(""))
 	err = interactor.DeleteUser(user)
 	if err == nil {
 		t.Errorf("Expectation: return error")
@@ -60,14 +60,14 @@ func TestUpdateUser(t *testing.T) {
 	interactor := usecase.NewUserInteractor(userRepository)
 
 	user := domain.User{}
-	userRepository.EXPECT().UpdateUser(user).Return(user, errors.New(""))
+	userRepository.EXPECT().Update(user).Return(user, errors.New(""))
 	_, err := interactor.UpdateUser(user)
 	if err == nil {
 		t.Errorf("Expectation: return error")
 	}
 
 	user = domain.User{Password: "test"}
-	userRepository.EXPECT().UpdateUser(user).Return(user, nil)
+	userRepository.EXPECT().Update(user).Return(user, nil)
 	rUser, err := interactor.UpdateUser(user)
 	if err != nil {
 		t.Errorf("Expectation: return nil")
@@ -84,12 +84,12 @@ func TestAuthenticateUser(t *testing.T) {
 	interactor := usecase.NewUserInteractor(userRepository)
 
 	user := domain.User{}
-	userRepository.EXPECT().AuthenticateUser(user).Return(nil)
+	userRepository.EXPECT().Authenticate(user).Return(nil)
 	err := interactor.AuthenticateUser(user)
 	if err != nil {
 		t.Errorf("Expectation: return nil")
 	}
-	userRepository.EXPECT().AuthenticateUser(user).Return(errors.New(""))
+	userRepository.EXPECT().Authenticate(user).Return(errors.New(""))
 	err = interactor.AuthenticateUser(user)
 	if err == nil {
 		t.Errorf("Expectation: return error")
@@ -103,13 +103,13 @@ func TestGetAllUsers(t *testing.T) {
 	interactor := usecase.NewUserInteractor(userRepository)
 
 	users := []domain.User{domain.User{Password: "test"}, domain.User{Password: "test"}, domain.User{Password: "test"}}
-	userRepository.EXPECT().GetAllUsers().Return(users, errors.New(""))
+	userRepository.EXPECT().GetAll().Return(users, errors.New(""))
 	_, err := interactor.GetAllUsers()
 	if err == nil {
 		t.Errorf("Expectation: return error")
 	}
 
-	userRepository.EXPECT().GetAllUsers().Return(users, nil)
+	userRepository.EXPECT().GetAll().Return(users, nil)
 	users, err = interactor.GetAllUsers()
 	if err != nil {
 		t.Errorf("Expectation: return nil")

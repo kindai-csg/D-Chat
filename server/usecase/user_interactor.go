@@ -16,7 +16,7 @@ func NewUserInteractor(userRepository UserRepository) *UserInteractor {
 }
 
 func (interactor *UserInteractor) AddNewUser(user domain.User) (domain.User, error) {
-	u, err := interactor.UserRepository.StoreUser(user)
+	u, err := interactor.UserRepository.Create(user)
 	if err != nil {
 		return domain.User{}, err
 	}
@@ -24,7 +24,7 @@ func (interactor *UserInteractor) AddNewUser(user domain.User) (domain.User, err
 }
 
 func (interactor *UserInteractor) DeleteUser(user domain.User) error {
-	err := interactor.UserRepository.DeleteUser(user.Id)
+	err := interactor.UserRepository.Delete(user.Id)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (interactor *UserInteractor) DeleteUser(user domain.User) error {
 }
 
 func (interactor *UserInteractor) UpdateUser(user domain.User) (domain.User, error) {
-	u, err := interactor.UserRepository.UpdateUser(user)
+	u, err := interactor.UserRepository.Update(user)
 	if err != nil {
 		return domain.User{}, err
 	}
@@ -40,7 +40,7 @@ func (interactor *UserInteractor) UpdateUser(user domain.User) (domain.User, err
 }
 
 func (interactor *UserInteractor) AuthenticateUser(user domain.User) error {
-	err := interactor.UserRepository.AuthenticateUser(user)
+	err := interactor.UserRepository.Authenticate(user)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (interactor *UserInteractor) AuthenticateUser(user domain.User) error {
 }
 
 func (interactor *UserInteractor) GetAllUsers() ([]domain.User, error) {
-	users, err := interactor.UserRepository.GetAllUsers()
+	users, err := interactor.UserRepository.GetAll()
 	if err != nil {
 		return nil, err
 	}
