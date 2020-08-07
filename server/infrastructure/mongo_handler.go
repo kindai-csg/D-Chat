@@ -42,7 +42,7 @@ func (handler *MongoHandler) castKvToBson(doc []database.KV) bson.D {
 func (handler *MongoHandler) InsertOne(collectionName string, doc []database.KV) (string, error) {
 	result, err := handler.database.Collection(collectionName).InsertOne(context.Background(), handler.castKvToBson(doc))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return string(result.InsertedID.(primitive.ObjectID)), nil
+	return string(result.InsertedID.([]byte)), nil
 }
