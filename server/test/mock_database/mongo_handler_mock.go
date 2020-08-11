@@ -34,22 +34,17 @@ func (m *MockMongoHandler) EXPECT() *MockMongoHandlerMockRecorder {
 }
 
 // CreateIndex mocks base method.
-func (m *MockMongoHandler) CreateIndex(arg0 string, arg1 []database.KV, arg2 ...[]database.KV) error {
+func (m *MockMongoHandler) CreateIndex(arg0 string, arg1, arg2 []database.KV) error {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0, arg1}
-	for _, a := range arg2 {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "CreateIndex", varargs...)
+	ret := m.ctrl.Call(m, "CreateIndex", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CreateIndex indicates an expected call of CreateIndex.
-func (mr *MockMongoHandlerMockRecorder) CreateIndex(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+func (mr *MockMongoHandlerMockRecorder) CreateIndex(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0, arg1}, arg2...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateIndex", reflect.TypeOf((*MockMongoHandler)(nil).CreateIndex), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateIndex", reflect.TypeOf((*MockMongoHandler)(nil).CreateIndex), arg0, arg1, arg2)
 }
 
 // Insert mocks base method.
