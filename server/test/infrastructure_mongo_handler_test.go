@@ -126,3 +126,85 @@ func TestMongoHandlerInsert(t *testing.T) {
 	t.Logf("id => %s", id)
 	// -------------ここまで-------------
 }
+
+// MongoDBのUpdateテスト
+func TestMongoHandlerUpdate(t *testing.T) {
+	handler := newMongoHandler(t)
+	rand.Seed(time.Now().UnixNano())
+
+	// -------------test1-------------
+	doc := []database.KV{
+		{"_id", strconv.Itoa(rand.Intn(1000))},
+		{"user_id", "test_user"},
+		{"password", "test_password"},
+	}
+	// collection_name ex)Test_2020_08_26_TestMongoHandlerUpdate1
+	collectionName := "Test_" + time.Now().Format("2006_01_02") + "_TestMongoHandlerUpdate1"
+	id, err := handler.Insert(collectionName, doc)
+	if err != nil {
+		t.Errorf("faild insert to mongodb => " + err.Error())
+	}
+	if reflect.TypeOf(id).Kind() != reflect.String {
+		t.Errorf("Expectation: string")
+	}
+	t.Logf("id => %s", id)
+
+	query := []database.KV{
+		{"_id", id},
+	}
+	update := []database.KV{
+		{"$set", []database.KV{
+			{"user_id", "test_user_update"},
+			{"password", "test_password_update"},
+		}},
+	}
+	err = handler.Update(collectionName, query, update)
+	if err != nil {
+		t.Errorf("faild update document => " + err.Error())
+	}
+	// -------------ここまで-------------
+
+	// -------------test2-------------
+	doc = []database.KV{
+		{"count", 100},
+		{"name", "test_name"},
+	}
+	// collection_name ex)Test_2020_08_26_TestMongoHandlerUpdate2
+	collectionName = "Test_" + time.Now().Format("2006_01_02") + "_TestMongoHandlerUpdate2"
+	id, err = handler.Insert(collectionName, doc)
+	if err != nil {
+		t.Errorf("faild insert to mongodb => " + err.Error())
+	}
+	if reflect.TypeOf(id).Kind() != reflect.String {
+		t.Errorf("Expectation: string")
+	}
+	t.Logf("id => %s", id)
+	doc = []database.KV{
+		{"count", 50},
+		{"name", "test_name"},
+	}
+	id, err = handler.Insert(collectionName, doc)
+	if err != nil {
+		t.Errorf("faild insert to mongodb => " + err.Error())
+	}
+	if reflect.TypeOf(id).Kind() != reflect.String {
+		t.Errorf("Expectation: string")
+	}
+	t.Logf("id => %s", id)
+
+	query = []database.KV{
+		{"count", []database.KV{
+			{"$gte", 100},
+		}},
+	}
+	update = []database.KV{
+		{"$set", []database.KV{
+			{"name", "test_name_update"},
+		}},
+	}
+	err = handler.Update(collectionName, query, update)
+	if err != nil {
+		t.Errorf("faild update document => " + err.Error())
+	}
+	// -------------ここまで-------------
+}

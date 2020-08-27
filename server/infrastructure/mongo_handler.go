@@ -30,6 +30,7 @@ func NewMongoHandler() (*MongoHandler, error) {
 
 // []database.KVをbson.D([]primitive.E)にキャストする
 // キャストはここからスターと
+// key: _idの値がstringじゃなかったら握り潰す
 func (handler *MongoHandler) castArrayKvToD(doc []database.KV) bson.D {
 	result := bson.D{}
 	for _, kv := range doc {
@@ -42,7 +43,6 @@ func (handler *MongoHandler) castArrayKvToD(doc []database.KV) bson.D {
 }
 
 // database.KVをprimitive.Eにキャストする
-// key: _idの値がstringじゃなかったら握り潰す
 func (handler *MongoHandler) castKvToE(kv database.KV) primitive.E {
 	kind := reflect.TypeOf(kv.Value).Kind()
 	if kind == reflect.Array || kind == reflect.Slice {
@@ -114,7 +114,7 @@ func (handler *MongoHandler) Insert(collectionName string, doc []database.KV) (s
 	return result.InsertedID.(string), nil
 }
 
-func (handler *MongoHandler) Update(collectionName string, filter []database.KV, update []database.KV) error {
-	_, err := handler.database.Collection(collectionName).UpdateMany(context.Background(), handler.castArrayKvToD(filter), handler.castArrayKvToD(update))
+func (handler *MongoHandler) Update(collectionName string, query []database.KV, update []database.KV) error {
+	_, err := handler.database.Collection(collectionName).UpdateMany(context.Background(), handler.castArrayKvToD(query), handler.castArrayKvToD(update))
 	return err
 }
