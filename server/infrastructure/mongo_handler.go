@@ -29,6 +29,8 @@ func NewMongoHandler() (*MongoHandler, error) {
 	return &mongoHandler, nil
 }
 
+// []database.KVをbson.D([]primitive.E)にキャストする
+// キャストはここからスターと
 func (handler *MongoHandler) castArrayKvToD(doc []database.KV) bson.D {
 	result := bson.D{}
 	for _, kv := range doc {
@@ -37,6 +39,7 @@ func (handler *MongoHandler) castArrayKvToD(doc []database.KV) bson.D {
 	return result
 }
 
+// database.KVをprimitive.Eにキャストする
 func (handler *MongoHandler) castKvToE(kv database.KV) primitive.E {
 	kind := reflect.TypeOf(kv.Value).Kind()
 	if kind == reflect.Array || kind == reflect.Slice {
@@ -57,6 +60,7 @@ func (handler *MongoHandler) castKvToE(kv database.KV) primitive.E {
 	return e
 }
 
+// 任意の配列をbson.Aにキャストする
 func (handler *MongoHandler) castArrayToA(array []interface{}) bson.A {
 	a := bson.A{}
 	for _, value := range array {
