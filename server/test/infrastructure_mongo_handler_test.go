@@ -1,7 +1,9 @@
 package test
 
 import (
+	"math/rand"
 	"reflect"
+	"strconv"
 	"testing"
 	"time"
 
@@ -24,6 +26,7 @@ func newMongoHandler(t *testing.T) *infrastructure.MongoHandler {
 // []database.KV -> bson.Dへの変換テストも兼ねてる
 func TestMongoHandlerInsert(t *testing.T) {
 	handler := newMongoHandler(t)
+	rand.Seed(time.Now().UnixNano())
 
 	// -------------test1-------------
 	doc := []database.KV{
@@ -87,6 +90,33 @@ func TestMongoHandlerInsert(t *testing.T) {
 	}
 	// collection_name ex)Test_2020_08_26_TestMongoHandlerInsert4
 	id, err = handler.Insert("Test_"+time.Now().Format("2006_01_02")+"_TestMongoHandlerInsert4", doc)
+	if err != nil {
+		t.Errorf("faild insert to mongodb => " + err.Error())
+	}
+	if reflect.TypeOf(id).Kind() != reflect.String {
+		t.Errorf("Expectation: string")
+	}
+	t.Logf("id => %s", id)
+	// -------------ここまで-------------
+
+	// -------------test5-------------
+	doc = []database.KV{{"_id", strconv.Itoa(rand.Intn(1000))}, {"test", "test"}}
+	// collection_name ex)Test_2020_08_26_TestMongoHandlerInsert5
+	id, err = handler.Insert("Test_"+time.Now().Format("2006_01_02")+"_TestMongoHandlerInsert5", doc)
+	if err != nil {
+		t.Errorf("faild insert to mongodb => " + err.Error())
+	}
+	if reflect.TypeOf(id).Kind() != reflect.String {
+		t.Errorf("Expectation: string")
+	}
+	t.Logf("id => %s", id)
+	// -------------ここまで-------------
+
+	// -------------test6-------------
+	rand.Seed(time.Now().UnixNano())
+	doc = []database.KV{{"_id", rand.Intn(1000)}, {"test", "test"}}
+	// collection_name ex)Test_2020_08_26_TestMongoHandlerInsert5
+	id, err = handler.Insert("Test_"+time.Now().Format("2006_01_02")+"_TestMongoHandlerInsert6", doc)
 	if err != nil {
 		t.Errorf("faild insert to mongodb => " + err.Error())
 	}

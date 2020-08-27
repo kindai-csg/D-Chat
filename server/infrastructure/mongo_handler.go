@@ -2,7 +2,6 @@ package infrastructure
 
 import (
 	"context"
-	"log"
 	"reflect"
 
 	"github.com/kindai-csg/D-Chat/interfaces/database"
@@ -34,12 +33,16 @@ func NewMongoHandler() (*MongoHandler, error) {
 func (handler *MongoHandler) castArrayKvToD(doc []database.KV) bson.D {
 	result := bson.D{}
 	for _, kv := range doc {
+		if kv.Key == "_id" && reflect.TypeOf(kv.Value).Kind() != reflect.String {
+			continue
+		}
 		result = append(result, handler.castKvToE(kv))
 	}
 	return result
 }
 
 // database.KVをprimitive.Eにキャストする
+// key: _idの値がstringじゃなかったら握り潰す
 func (handler *MongoHandler) castKvToE(kv database.KV) primitive.E {
 	kind := reflect.TypeOf(kv.Value).Kind()
 	if kind == reflect.Array || kind == reflect.Slice {
@@ -51,7 +54,6 @@ func (handler *MongoHandler) castKvToE(kv database.KV) primitive.E {
 	} else if reflect.TypeOf(kv.Value) == reflect.TypeOf(database.KV{}) {
 		kv.Value = bson.D{handler.castKvToE(kv.Value.(database.KV))}
 	}
-	log.Println("test")
 
 	e := primitive.E{
 		Key:   kv.Key,
@@ -105,7 +107,8 @@ func (handler *MongoHandler) Insert(collectionName string, doc []database.KV) (s
 	if err != nil {
 		return "", err
 	}
-	if reflect.TypeOf(result.InsertedID) == reflect.TypeOf(primitive.ObjectID{}) {
+	typeOf := reflect.TypeOf(result.InsertedID)
+	if typeOf == reflect.TypeOf(primitive.ObjectID{}) {
 		return result.InsertedID.(primitive.ObjectID).String(), nil
 	}
 	return result.InsertedID.(string), nil
