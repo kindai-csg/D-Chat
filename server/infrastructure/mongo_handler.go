@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"context"
+	"log"
 	"reflect"
 
 	"github.com/kindai-csg/D-Chat/interfaces/database"
@@ -37,19 +38,42 @@ func (handler *MongoHandler) castArrayKvToD(doc []database.KV) bson.D {
 }
 
 func (handler *MongoHandler) castKvToE(kv database.KV) primitive.E {
-	if reflect.TypeOf(kv.Value).Elem() == reflect.TypeOf(database.KV{}) {
-		kind := reflect.TypeOf(kv.Value).Kind()
-		if kind == reflect.Array || kind == reflect.Slice {
+	kind := reflect.TypeOf(kv.Value).Kind()
+	if kind == reflect.Array || kind == reflect.Slice {
+		if reflect.TypeOf(kv.Value).Elem() == reflect.TypeOf(database.KV{}) {
 			kv.Value = handler.castArrayKvToD(kv.Value.([]database.KV))
 		} else {
-			kv.Value = handler.castKvToE(kv.Value.(database.KV))
+			kv.Value = handler.castArrayToA(kv.Value.([]interface{}))
 		}
+	} else if reflect.TypeOf(kv.Value) == reflect.TypeOf(database.KV{}) {
+		kv.Value = bson.D{handler.castKvToE(kv.Value.(database.KV))}
 	}
+	log.Println("test")
+
 	e := primitive.E{
 		Key:   kv.Key,
 		Value: kv.Value,
 	}
 	return e
+}
+
+func (handler *MongoHandler) castArrayToA(array []interface{}) bson.A {
+	a := bson.A{}
+	for _, value := range array {
+		kind := reflect.TypeOf(value).Kind()
+		if kind == reflect.Array || kind == reflect.Slice {
+			if reflect.TypeOf(value).Elem() == reflect.TypeOf(database.KV{}) {
+				a = append(a, handler.castArrayKvToD(value.([]database.KV)))
+			} else {
+				a = append(a, handler.castArrayToA(value.([]interface{})))
+			}
+		} else if reflect.TypeOf(value) == reflect.TypeOf(database.KV{}) {
+			a = append(a, handler.castKvToE(value.(database.KV)))
+		} else {
+			a = append(a, value)
+		}
+	}
+	return a
 }
 
 func (handler *MongoHandler) createIndexOptions(opts []database.KV) *options.IndexOptions {
@@ -77,7 +101,10 @@ func (handler *MongoHandler) Insert(collectionName string, doc []database.KV) (s
 	if err != nil {
 		return "", err
 	}
-	return string(result.InsertedID.([]byte)), nil
+	if reflect.TypeOf(result.InsertedID) == reflect.TypeOf(primitive.ObjectID{}) {
+		return result.InsertedID.(primitive.ObjectID).String(), nil
+	}
+	return result.InsertedID.(string), nil
 }
 
 func (handler *MongoHandler) Update(collectionName string, filter []database.KV, update []database.KV) error {
