@@ -208,3 +208,61 @@ func TestMongoHandlerUpdate(t *testing.T) {
 	}
 	// -------------ここまで-------------
 }
+
+// MongoDBのFindテスト
+// bson.D -> []database.KVへの変換テストも兼ねてる
+func TestMongoHandlerFind(t *testing.T) {
+	handler := newMongoHandler(t)
+	rand.Seed(time.Now().UnixNano())
+
+	docs := [][]database.KV{
+		{
+			{"_id", strconv.Itoa(rand.Intn(1000))},
+			{"user_id", "test_user"},
+			{"password", "test_password"},
+		},
+		{
+			{"count", 0},
+			{"tags", []interface{}{"test1", "test2", 3}},
+		},
+		{
+			{"name", "test"},
+			{"msg", []database.KV{
+				{"count", 2},
+				{"body", "test_body"},
+			}},
+		},
+		{
+			{"msg", database.KV{"body", "test_body"}},
+		},
+	}
+	querys := [][]database.KV{
+		{
+			{"user_id", "test_user"},
+		},
+		{
+			{"tags", database.KV{"$exists", true}},
+		},
+		{
+			{"msg.count", database.KV{"$gte", 2}},
+		},
+		{},
+	}
+	for i, _ := range docs {
+		t.Logf("--------start %d--------", i)
+		// collection_name ex)Test_2020_08_26_TestMongoHandlerFind${i}
+		collectionName := "Test_" + time.Now().Format("2006_01_02") + "_TestMongoHandlerFind" + strconv.Itoa(i)
+		id, err := handler.Insert(collectionName, docs[i])
+		if err != nil {
+			t.Errorf("faild insert to mongodb => " + err.Error())
+		}
+		t.Logf("id => %s", id)
+
+		result, err := handler.Find(collectionName, querys[i])
+		if err != nil {
+			t.Errorf("faild find document => " + err.Error())
+		}
+		t.Log(result)
+		t.Logf("--------end %d--------", i)
+	}
+}

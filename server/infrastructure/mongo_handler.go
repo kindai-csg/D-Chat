@@ -82,6 +82,60 @@ func (handler *MongoHandler) castArrayToA(array []interface{}) bson.A {
 	return a
 }
 
+// bson.D([]primitive.E)を[]database.KVにキャストする
+// キャストはここからスタート
+func (handler *MongoHandler) castDToArrayKv(d bson.D) []database.KV {
+	arrayKv := []database.KV{}
+	for _, e := range d {
+		if reflect.TypeOf(e.Value) == reflect.TypeOf(primitive.ObjectID{}) {
+			arrayKv = append(arrayKv, database.KV{e.Key, e.Value.(primitive.ObjectID).String()})
+			continue
+		}
+		arrayKv = append(arrayKv, handler.castEToKv(e))
+	}
+	return arrayKv
+}
+
+// primitive.Eをdatabase.KVにキャストする
+func (handler *MongoHandler) castEToKv(e primitive.E) database.KV {
+	kind := reflect.TypeOf(e.Value).Kind()
+	if kind == reflect.Array || kind == reflect.Slice {
+		if reflect.TypeOf(e.Value).Elem() == reflect.TypeOf(primitive.E{}) {
+			e.Value = handler.castDToArrayKv(e.Value.(bson.D))
+		} else {
+			e.Value = handler.castAToArray(e.Value.(bson.A))
+		}
+	} else if reflect.TypeOf(e.Value) == reflect.TypeOf(primitive.E{}) {
+		e.Value = []database.KV{handler.castEToKv(e.Value.(primitive.E))}
+	}
+
+	kv := database.KV{
+		Key:   e.Key,
+		Value: e.Value,
+	}
+	return kv
+}
+
+// bson.Aを[]interface{}にキャストする
+func (handler *MongoHandler) castAToArray(a bson.A) []interface{} {
+	array := []interface{}{}
+	for _, value := range a {
+		kind := reflect.TypeOf(value).Kind()
+		if kind == reflect.Array || kind == reflect.Slice {
+			if reflect.TypeOf(value).Elem() == reflect.TypeOf(primitive.E{}) {
+				array = append(array, handler.castDToArrayKv(value.(bson.D)))
+			} else {
+				array = append(array, handler.castAToArray(value.(bson.A)))
+			}
+		} else if reflect.TypeOf(value) == reflect.TypeOf(primitive.E{}) {
+			array = append(array, handler.castEToKv(value.(primitive.E)))
+		} else {
+			array = append(array, value)
+		}
+	}
+	return array
+}
+
 func (handler *MongoHandler) createIndexOptions(opts []database.KV) *options.IndexOptions {
 	indexOptions := options.IndexOptions{}
 	for _, opt := range opts {
@@ -117,4 +171,21 @@ func (handler *MongoHandler) Insert(collectionName string, doc []database.KV) (s
 func (handler *MongoHandler) Update(collectionName string, query []database.KV, update []database.KV) error {
 	_, err := handler.database.Collection(collectionName).UpdateMany(context.Background(), handler.castArrayKvToD(query), handler.castArrayKvToD(update))
 	return err
+}
+
+func (handler *MongoHandler) Find(collectionName string, query []database.KV) ([][]database.KV, error) {
+	cursor, err := handler.database.Collection(collectionName).Find(context.Background(), handler.castArrayKvToD(query))
+	if err != nil {
+		return [][]database.KV{}, err
+	}
+	arrayKv := [][]database.KV{}
+	for cursor.Next(context.Background()) {
+		var result bson.D
+		err := cursor.Decode(&result)
+		if err != nil {
+			return arrayKv, err
+		}
+		arrayKv = append(arrayKv, handler.castDToArrayKv(result))
+	}
+	return arrayKv, nil
 }
