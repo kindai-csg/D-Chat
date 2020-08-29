@@ -89,6 +89,15 @@ func (handler *MongoHandler) FindOne(collectionName string, query []database.KV)
 	return handler.castDToArrayKv(result), nil
 }
 
+//MongoDB Delete
+func (handler *MongoHandler) Delete(collectionName string, query []database.KV) (int64, error) {
+	result, err := handler.database.Collection(collectionName).DeleteMany(context.Background(), handler.castArrayKvToD(query))
+	if err != nil {
+		return 0, err
+	}
+	return result.DeletedCount, nil
+}
+
 // インデックスオプションをKVから整形
 func (handler *MongoHandler) createIndexOptions(opts []database.KV) *options.IndexOptions {
 	indexOptions := options.IndexOptions{}

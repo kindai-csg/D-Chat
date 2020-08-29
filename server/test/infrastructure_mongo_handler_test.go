@@ -326,7 +326,7 @@ func TestMongoHandlerFindOne(t *testing.T) {
 	}
 	for i, _ := range docs {
 		t.Logf("--------start %d--------", i)
-		// collection_name ex)Test_2020_08_26_TestMongoHandlerFind${i}
+		// collection_name ex)Test_2020_08_26_TestMongoHandlerFindOne${i}
 		collectionName := "Test_" + time.Now().Format("2006_01_02") + "_TestMongoHandlerFindOne" + strconv.Itoa(i)
 		id, err := handler.Insert(collectionName, docs[i])
 		if err != nil {
@@ -334,9 +334,43 @@ func TestMongoHandlerFindOne(t *testing.T) {
 		}
 		t.Logf("id => %s", id)
 
-		result, err := handler.Find(collectionName, querys[i])
+		result, err := handler.FindOne(collectionName, querys[i])
 		if err != nil {
 			t.Errorf("faild find document => " + err.Error())
+		}
+		t.Log(result)
+		t.Logf("--------end %d--------", i)
+	}
+}
+
+// MongoDBのDeleteテスト
+func TestMongoHandlerDelete(t *testing.T) {
+	handler := newMongoHandler(t)
+	rand.Seed(time.Now().UnixNano())
+
+	docs := [][]database.KV{
+		{
+			{"count", rand.Intn(1000)},
+		},
+	}
+	querys := [][]database.KV{
+		{
+			{"count", database.KV{"$gte", 500}},
+		},
+	}
+	for i, _ := range docs {
+		t.Logf("--------start %d--------", i)
+		// collection_name ex)Test_2020_08_26_TestMongoHandlerDelete${i}
+		collectionName := "Test_" + time.Now().Format("2006_01_02") + "_TestMongoHandlerDelete" + strconv.Itoa(i)
+		id, err := handler.Insert(collectionName, docs[i])
+		if err != nil {
+			t.Errorf("faild insert to mongodb => " + err.Error())
+		}
+		t.Logf("id => %s", id)
+
+		result, err := handler.Delete(collectionName, querys[i])
+		if err != nil {
+			t.Errorf("faild delete document => " + err.Error())
 		}
 		t.Log(result)
 		t.Logf("--------end %d--------", i)
