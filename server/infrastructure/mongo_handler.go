@@ -28,6 +28,7 @@ func NewMongoHandler() (*MongoHandler, error) {
 	return &mongoHandler, nil
 }
 
+// MongoDB createIndex
 func (handler *MongoHandler) CreateIndex(collectionName string, index []database.KV, opt []database.KV) error {
 	indexModel := mongo.IndexModel{
 		Keys:    handler.castArrayKvToD(index),
@@ -74,12 +75,14 @@ func (handler *MongoHandler) Find(collectionName string, query []database.KV) ([
 	return arrayKv, nil
 }
 
+// インデックスオプションをKVから整形
 func (handler *MongoHandler) createIndexOptions(opts []database.KV) *options.IndexOptions {
 	indexOptions := options.IndexOptions{}
 	for _, opt := range opts {
 		switch opt.Key {
 		case "unique":
-			indexOptions.Unique = opt.Value.(*bool)
+			tmp := opt.Value.(bool)
+			indexOptions.Unique = &tmp
 		}
 	}
 	return &indexOptions

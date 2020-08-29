@@ -266,3 +266,41 @@ func TestMongoHandlerFind(t *testing.T) {
 		t.Logf("--------end %d--------", i)
 	}
 }
+
+func TestMongoHandlerCreateIndex(t *testing.T) {
+	handler := newMongoHandler(t)
+	rand.Seed(time.Now().UnixNano())
+
+	doc := []database.KV{
+		{"user_id", "test1"},
+		{"name", "test2"},
+	}
+	// collection_name ex)Test_2020_08_26_TestMongoHandlerCreateIndex0
+	collectionName := "Test_" + time.Now().Format("2006_01_02") + "_TestMongoHandlerIndex0"
+	id, err := handler.Insert(collectionName, doc)
+	if err != nil {
+		t.Errorf("faild insert to mongodb => " + err.Error())
+	}
+	t.Logf("id => %s", id)
+
+	index := []database.KV{
+		{"user_id", 1},
+	}
+	opt := []database.KV{
+		{"unique", true},
+	}
+	err = handler.CreateIndex(collectionName, index, opt)
+	if err != nil {
+		t.Errorf("faild create index => " + err.Error())
+	}
+
+	// 重複チェック
+	doc = []database.KV{
+		{"user_id", "test1"},
+		{"name", "test2"},
+	}
+	_, err = handler.Insert(collectionName, doc)
+	if err == nil {
+		t.Errorf("faild unique index")
+	}
+}
