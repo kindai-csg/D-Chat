@@ -267,6 +267,7 @@ func TestMongoHandlerFind(t *testing.T) {
 	}
 }
 
+// MongoDBのCreateIndexテスト
 func TestMongoHandlerCreateIndex(t *testing.T) {
 	handler := newMongoHandler(t)
 	rand.Seed(time.Now().UnixNano())
@@ -302,5 +303,42 @@ func TestMongoHandlerCreateIndex(t *testing.T) {
 	_, err = handler.Insert(collectionName, doc)
 	if err == nil {
 		t.Errorf("faild unique index")
+	}
+}
+
+// MongoDBのFindOneテスト
+func TestMongoHandlerFindOne(t *testing.T) {
+	handler := newMongoHandler(t)
+	rand.Seed(time.Now().UnixNano())
+
+	r := strconv.Itoa(rand.Intn(1000))
+	docs := [][]database.KV{
+		{
+			{"_id", r},
+			{"user_id", "test_user"},
+			{"password", "test_password"},
+		},
+	}
+	querys := [][]database.KV{
+		{
+			{"_id", r},
+		},
+	}
+	for i, _ := range docs {
+		t.Logf("--------start %d--------", i)
+		// collection_name ex)Test_2020_08_26_TestMongoHandlerFind${i}
+		collectionName := "Test_" + time.Now().Format("2006_01_02") + "_TestMongoHandlerFindOne" + strconv.Itoa(i)
+		id, err := handler.Insert(collectionName, docs[i])
+		if err != nil {
+			t.Errorf("faild insert to mongodb => " + err.Error())
+		}
+		t.Logf("id => %s", id)
+
+		result, err := handler.Find(collectionName, querys[i])
+		if err != nil {
+			t.Errorf("faild find document => " + err.Error())
+		}
+		t.Log(result)
+		t.Logf("--------end %d--------", i)
 	}
 }

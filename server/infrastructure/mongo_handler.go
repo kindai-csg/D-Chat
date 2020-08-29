@@ -75,6 +75,20 @@ func (handler *MongoHandler) Find(collectionName string, query []database.KV) ([
 	return arrayKv, nil
 }
 
+// MongoDB FindOne
+func (handler *MongoHandler) FindOne(collectionName string, query []database.KV) ([]database.KV, error) {
+	raw, err := handler.database.Collection(collectionName).Find(context.Background(), handler.castArrayKvToD(query))
+	if err != nil {
+		return []database.KV{}, err
+	}
+	var result bson.D
+	err = raw.Decode(&result)
+	if err != nil {
+		return []database.KV{}, nil
+	}
+	return handler.castDToArrayKv(result), nil
+}
+
 // インデックスオプションをKVから整形
 func (handler *MongoHandler) createIndexOptions(opts []database.KV) *options.IndexOptions {
 	indexOptions := options.IndexOptions{}
