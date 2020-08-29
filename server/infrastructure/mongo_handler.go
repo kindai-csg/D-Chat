@@ -28,6 +28,66 @@ func NewMongoHandler() (*MongoHandler, error) {
 	return &mongoHandler, nil
 }
 
+func (handler *MongoHandler) CreateIndex(collectionName string, index []database.KV, opt []database.KV) error {
+	indexModel := mongo.IndexModel{
+		Keys:    handler.castArrayKvToD(index),
+		Options: handler.createIndexOptions(opt),
+	}
+	_, err := handler.database.Collection(collectionName).Indexes().CreateOne(context.Background(), indexModel)
+	return err
+}
+
+// MongoDB InsertOne
+func (handler *MongoHandler) Insert(collectionName string, doc []database.KV) (string, error) {
+	result, err := handler.database.Collection(collectionName).InsertOne(context.Background(), handler.castArrayKvToD(doc))
+	if err != nil {
+		return "", err
+	}
+	typeOf := reflect.TypeOf(result.InsertedID)
+	if typeOf == reflect.TypeOf(primitive.ObjectID{}) {
+		return result.InsertedID.(primitive.ObjectID).String(), nil
+	}
+	return result.InsertedID.(string), nil
+}
+
+// MongoDB Update
+func (handler *MongoHandler) Update(collectionName string, query []database.KV, update []database.KV) error {
+	_, err := handler.database.Collection(collectionName).UpdateMany(context.Background(), handler.castArrayKvToD(query), handler.castArrayKvToD(update))
+	return err
+}
+
+// MongoDB Find
+func (handler *MongoHandler) Find(collectionName string, query []database.KV) ([][]database.KV, error) {
+	cursor, err := handler.database.Collection(collectionName).Find(context.Background(), handler.castArrayKvToD(query))
+	if err != nil {
+		return [][]database.KV{}, err
+	}
+	arrayKv := [][]database.KV{}
+	for cursor.Next(context.Background()) {
+		var result bson.D
+		err := cursor.Decode(&result)
+		if err != nil {
+			return arrayKv, err
+		}
+		arrayKv = append(arrayKv, handler.castDToArrayKv(result))
+	}
+	return arrayKv, nil
+}
+
+func (handler *MongoHandler) createIndexOptions(opts []database.KV) *options.IndexOptions {
+	indexOptions := options.IndexOptions{}
+	for _, opt := range opts {
+		switch opt.Key {
+		case "unique":
+			indexOptions.Unique = opt.Value.(*bool)
+		}
+	}
+	return &indexOptions
+}
+
+// -----------------------
+// キャスト関係
+
 // []database.KVをbson.D([]primitive.E)にキャストする
 // キャストはここからスターと
 // key: _idの値がstringじゃなかったら握り潰す
@@ -134,58 +194,4 @@ func (handler *MongoHandler) castAToArray(a bson.A) []interface{} {
 		}
 	}
 	return array
-}
-
-func (handler *MongoHandler) createIndexOptions(opts []database.KV) *options.IndexOptions {
-	indexOptions := options.IndexOptions{}
-	for _, opt := range opts {
-		switch opt.Key {
-		case "unique":
-			indexOptions.Unique = opt.Value.(*bool)
-		}
-	}
-	return &indexOptions
-}
-
-func (handler *MongoHandler) CreateIndex(collectionName string, index []database.KV, opt []database.KV) error {
-	indexModel := mongo.IndexModel{
-		Keys:    handler.castArrayKvToD(index),
-		Options: handler.createIndexOptions(opt),
-	}
-	_, err := handler.database.Collection(collectionName).Indexes().CreateOne(context.Background(), indexModel)
-	return err
-}
-
-func (handler *MongoHandler) Insert(collectionName string, doc []database.KV) (string, error) {
-	result, err := handler.database.Collection(collectionName).InsertOne(context.Background(), handler.castArrayKvToD(doc))
-	if err != nil {
-		return "", err
-	}
-	typeOf := reflect.TypeOf(result.InsertedID)
-	if typeOf == reflect.TypeOf(primitive.ObjectID{}) {
-		return result.InsertedID.(primitive.ObjectID).String(), nil
-	}
-	return result.InsertedID.(string), nil
-}
-
-func (handler *MongoHandler) Update(collectionName string, query []database.KV, update []database.KV) error {
-	_, err := handler.database.Collection(collectionName).UpdateMany(context.Background(), handler.castArrayKvToD(query), handler.castArrayKvToD(update))
-	return err
-}
-
-func (handler *MongoHandler) Find(collectionName string, query []database.KV) ([][]database.KV, error) {
-	cursor, err := handler.database.Collection(collectionName).Find(context.Background(), handler.castArrayKvToD(query))
-	if err != nil {
-		return [][]database.KV{}, err
-	}
-	arrayKv := [][]database.KV{}
-	for cursor.Next(context.Background()) {
-		var result bson.D
-		err := cursor.Decode(&result)
-		if err != nil {
-			return arrayKv, err
-		}
-		arrayKv = append(arrayKv, handler.castDToArrayKv(result))
-	}
-	return arrayKv, nil
 }
