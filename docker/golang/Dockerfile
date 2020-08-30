@@ -6,6 +6,7 @@ RUN apt-get -y update && \
     apt-get -y install git
 
 RUN go get -v github.com/gin-gonic/gin
+RUN go get -v go.mongodb.org/mongo-driver/mongo
 
 # development 
 RUN go get -v github.com/golang/mock/gomock
