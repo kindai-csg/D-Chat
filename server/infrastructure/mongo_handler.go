@@ -77,16 +77,17 @@ func (handler *MongoHandler) Find(collectionName string, query []database.KV) ([
 
 // MongoDB FindOne
 func (handler *MongoHandler) FindOne(collectionName string, query []database.KV) ([]database.KV, error) {
-	raw, err := handler.database.Collection(collectionName).Find(context.Background(), handler.castArrayKvToD(query))
+	result := handler.database.Collection(collectionName).FindOne(context.Background(), handler.castArrayKvToD(query))
+	err := result.Err()
 	if err != nil {
 		return []database.KV{}, err
 	}
-	var result bson.D
-	err = raw.Decode(&result)
+	var doc bson.D
+	err = result.Decode(&doc)
 	if err != nil {
-		return []database.KV{}, nil
+		return []database.KV{}, err
 	}
-	return handler.castDToArrayKv(result), nil
+	return handler.castDToArrayKv(doc), nil
 }
 
 //MongoDB Delete
