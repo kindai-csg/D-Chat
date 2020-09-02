@@ -15,7 +15,7 @@ func NewUserInteractor(userRepository UserRepository) *UserInteractor {
 	return &userInteractor
 }
 
-func (interactor *UserInteractor) AddNewUser(user domain.User) (domain.User, error) {
+func (interactor *UserInteractor) Create(user domain.User) (domain.User, error) {
 	u, err := interactor.UserRepository.Create(user)
 	if err != nil {
 		return domain.User{}, err

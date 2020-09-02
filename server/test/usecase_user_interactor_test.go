@@ -10,7 +10,7 @@ import (
 	"github.com/kindai-csg/D-Chat/usecase"
 )
 
-func TestAddNewUser(t *testing.T) {
+func TestUserInteractorCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	userRepository := mock.NewMockUserRepository(ctrl)
@@ -18,14 +18,14 @@ func TestAddNewUser(t *testing.T) {
 
 	user := domain.User{}
 	userRepository.EXPECT().Create(user).Return(user, errors.New(""))
-	_, err := interactor.AddNewUser(user)
+	_, err := interactor.Create(user)
 	if err == nil {
 		t.Errorf("Expectation: return error")
 	}
 
 	user = domain.User{Password: "test"}
 	userRepository.EXPECT().Create(user).Return(user, nil)
-	rUser, err := interactor.AddNewUser(user)
+	rUser, err := interactor.Create(user)
 	if err != nil {
 		t.Errorf("Expectation: return nil")
 	}
