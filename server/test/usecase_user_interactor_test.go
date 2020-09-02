@@ -25,12 +25,9 @@ func TestUserInteractorCreate(t *testing.T) {
 
 	user = domain.User{Password: "test"}
 	userRepository.EXPECT().Create(user).Return(user, nil)
-	rUser, err := interactor.Create(user)
+	_, err = interactor.Create(user)
 	if err != nil {
 		t.Errorf("Expectation: return nil")
-	}
-	if rUser.Password != "" {
-		t.Errorf("Expectation: hide password")
 	}
 }
 
@@ -68,12 +65,9 @@ func TestUpdateUser(t *testing.T) {
 
 	user = domain.User{Password: "test"}
 	userRepository.EXPECT().Update(user).Return(user, nil)
-	rUser, err := interactor.UpdateUser(user)
+	_, err = interactor.UpdateUser(user)
 	if err != nil {
 		t.Errorf("Expectation: return nil")
-	}
-	if rUser.Password != "" {
-		t.Errorf("Expectation: hide password")
 	}
 }
 
@@ -110,13 +104,8 @@ func TestGetAllUsers(t *testing.T) {
 	}
 
 	userRepository.EXPECT().GetAll().Return(users, nil)
-	users, err = interactor.GetAllUsers()
+	_, err = interactor.GetAllUsers()
 	if err != nil {
 		t.Errorf("Expectation: return nil")
-	}
-	for _, user := range users {
-		if user.Password != "" {
-			t.Errorf("Expectation: hide password")
-		}
 	}
 }

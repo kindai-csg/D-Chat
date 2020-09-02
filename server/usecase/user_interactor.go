@@ -20,7 +20,7 @@ func (interactor *UserInteractor) Create(user domain.User) (domain.User, error) 
 	if err != nil {
 		return domain.User{}, err
 	}
-	return interactor.hidePassword(u), nil
+	return u, nil
 }
 
 func (interactor *UserInteractor) DeleteUser(user domain.User) error {
@@ -36,7 +36,7 @@ func (interactor *UserInteractor) UpdateUser(user domain.User) (domain.User, err
 	if err != nil {
 		return domain.User{}, err
 	}
-	return interactor.hidePassword(u), nil
+	return u, nil
 }
 
 func (interactor *UserInteractor) AuthenticateUser(user domain.User) error {
@@ -52,13 +52,5 @@ func (interactor *UserInteractor) GetAllUsers() ([]domain.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	for i, u := range users {
-		users[i] = interactor.hidePassword(u)
-	}
 	return users, nil
-}
-
-func (interactor *UserInteractor) hidePassword(user domain.User) domain.User {
-	user.Password = ""
-	return user
 }
