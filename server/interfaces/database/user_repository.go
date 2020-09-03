@@ -61,7 +61,7 @@ func (repository *UserRepository) Delete(id string) error {
 	query := []KV{
 		{"_id", id},
 	}
-	err := repository.mongoHandler.Delete(repository.collectionName, query)
+	_, err := repository.mongoHandler.Delete(repository.collectionName, query)
 	return err
 }
 

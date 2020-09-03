@@ -6,5 +6,5 @@ type MongoHandler interface {
 	Find(string, []KV) ([][]KV, error)
 	FindOne(string, []KV) ([]KV, error)
 	Update(string, []KV, []KV) error
-	Delete(string, []KV) error
+	Delete(string, []KV) (int64, error)
 }
