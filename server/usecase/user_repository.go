@@ -7,5 +7,5 @@ type UserRepository interface {
 	Update(domain.User) (domain.User, error)
 	Delete(string) error
 	GetAll() ([]domain.User, error)
-	Authenticate(domain.User) error
+	Authenticate(string, string) error
 }

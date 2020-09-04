@@ -39,8 +39,8 @@ func (interactor *UserInteractor) UpdateUser(user domain.User) (domain.User, err
 	return u, nil
 }
 
-func (interactor *UserInteractor) AuthenticateUser(user domain.User) error {
-	err := interactor.UserRepository.Authenticate(user)
+func (interactor *UserInteractor) AuthenticateUser(user_id string, password string) error {
+	err := interactor.UserRepository.Authenticate(user_id, password)
 	if err != nil {
 		return err
 	}

@@ -15,13 +15,18 @@ func init() {
 		panic(err)
 	}
 	logger := NewLoggerStd()
+	jwt := NewTokenJwt("secret", 24)
 
 	userController := controller.NewUserController(logger, mongoHandler)
+	tokenController := controller.NewTokenController(logger, jwt, mongoHandler)
 
 	// ------------------------------
 	// api v1
 	// ------------------------------
 	v1 := router.Group("/v1")
+	// parameter: gateway.LoginInput
+	// response: gateway.TokenOutput
+	v1.POST("/login", func(c *gin.Context) { tokenController.CreateToken(c) })
 	// parameter: gateway.UserInput
 	// response: gateway.UserInfoOutput
 	v1.POST("/users", func(c *gin.Context) { userController.CreateUser(c) })

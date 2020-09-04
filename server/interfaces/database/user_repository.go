@@ -1,7 +1,13 @@
 package database
 
 import (
+	"crypto/md5"
+	"encoding/base64"
+	"errors"
+	"strings"
+
 	"github.com/kindai-csg/D-Chat/domain"
+	"github.com/kindai-csg/D-Chat/domain/enum"
 )
 
 type UserRepository struct {
@@ -99,6 +105,34 @@ func (repository *UserRepository) GetAll() ([]domain.User, error) {
 	return users, nil
 }
 
-func (repository *UserRepository) Authenticate(user domain.User) error {
-	return nil
+func (repository *UserRepository) Authenticate(user_id string, password string) error {
+	query := []KV{
+		{"user_id", user_id},
+	}
+	user, err := repository.mongoHandler.FindOne(repository.collectionName, query)
+	if err != nil {
+		return err
+	}
+	for _, kv := range user {
+		if kv.Key == "password" {
+			hashTypeStrIndex := strings.Index(kv.Value.(string), "}") + 1
+			if kv.Value.(string) == repository.hashPassword(password, kv.Value.(string)[0:hashTypeStrIndex]) {
+				return nil
+			}
+			break
+		}
+	}
+	return errors.New("wrong id or password")
+}
+
+func (repository *UserRepository) hashPassword(password string, hahsTypeStr string) string {
+	switch hahsTypeStr {
+	case enum.MD5.String():
+		md5 := md5.Sum([]byte(password))
+		password = enum.MD5.String() + base64.StdEncoding.EncodeToString(md5[:])
+	default:
+		md5 := md5.Sum([]byte(password))
+		password = enum.MD5.String() + base64.StdEncoding.EncodeToString(md5[:])
+	}
+	return password
 }

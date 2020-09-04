@@ -7,6 +7,7 @@ RUN apt-get -y update && \
 
 RUN go get -v github.com/gin-gonic/gin
 RUN go get -v go.mongodb.org/mongo-driver/mongo
+RUN go get -v go get -v github.com/dgrijalva/jwt-go
 
 # development 
 RUN go get -v github.com/golang/mock/gomock
