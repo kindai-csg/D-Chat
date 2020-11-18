@@ -7,6 +7,6 @@ RUN apt-get -y update && \
 
 # development 
 RUN go get -v github.com/golang/mock/mockgen
-RUN go install -v github.com/golang/mock/mockgen
+RUN go get -v github.com/pilu/fresh 
 
 CMD ["go", "run", "main.go"]
