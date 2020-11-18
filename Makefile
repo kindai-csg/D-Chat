@@ -1,3 +1,5 @@
+init:
+	cp pre-commit ./.git/hooks/pre-commit
 up:
 	docker-compose build
 	docker-compose up -d
