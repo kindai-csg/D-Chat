@@ -3,12 +3,9 @@
 ### Required environment
 - docker
 - docker-compose
+- make
 ### Start
-1. start up container
+1. start up project
     ```
-    docker-compose up -d
-    ```
-1. start up server
-    ```
-    docker-compose exec server go run main.go
+    make up
     ```
