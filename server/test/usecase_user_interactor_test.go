@@ -77,14 +77,13 @@ func TestAuthenticateUser(t *testing.T) {
 	userRepository := mock.NewMockUserRepository(ctrl)
 	interactor := usecase.NewUserInteractor(userRepository)
 
-	user := domain.User{}
-	userRepository.EXPECT().Authenticate(user).Return(nil)
-	err := interactor.AuthenticateUser(user)
+	userRepository.EXPECT().Authenticate("id", "password").Return(nil)
+	err := interactor.AuthenticateUser("id", "password")
 	if err != nil {
 		t.Errorf("Expectation: return nil")
 	}
-	userRepository.EXPECT().Authenticate(user).Return(errors.New(""))
-	err = interactor.AuthenticateUser(user)
+	userRepository.EXPECT().Authenticate("id", "password").Return(errors.New(""))
+	err = interactor.AuthenticateUser("id", "password")
 	if err == nil {
 		t.Errorf("Expectation: return error")
 	}
