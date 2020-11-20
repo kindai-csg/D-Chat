@@ -5,9 +5,10 @@
 package mock_database
 
 import (
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	database "github.com/kindai-csg/D-Chat/interfaces/database"
-	reflect "reflect"
 )
 
 // MockMongoHandler is a mock of MongoHandler interface.
@@ -77,6 +78,21 @@ func (mr *MockMongoHandlerMockRecorder) Find(arg0, arg1 interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMongoHandler)(nil).Find), arg0, arg1)
 }
 
+// FindOne mocks base method.
+func (m *MockMongoHandler) FindOne(arg0 string, arg1 []database.KV) ([]database.KV, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOne", arg0, arg1)
+	ret0, _ := ret[0].([]database.KV)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOne indicates an expected call of FindOne.
+func (mr *MockMongoHandlerMockRecorder) FindOne(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOne", reflect.TypeOf((*MockMongoHandler)(nil).FindOne), arg0, arg1)
+}
+
 // Update mocks base method.
 func (m *MockMongoHandler) Update(arg0 string, arg1, arg2 []database.KV) error {
 	m.ctrl.T.Helper()
@@ -92,11 +108,12 @@ func (mr *MockMongoHandlerMockRecorder) Update(arg0, arg1, arg2 interface{}) *go
 }
 
 // Delete mocks base method.
-func (m *MockMongoHandler) Delete(arg0 string, arg1 []database.KV) error {
+func (m *MockMongoHandler) Delete(arg0 string, arg1 []database.KV) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Delete indicates an expected call of Delete.

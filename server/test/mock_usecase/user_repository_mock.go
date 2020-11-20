@@ -5,9 +5,10 @@
 package mock_usecase
 
 import (
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	domain "github.com/kindai-csg/D-Chat/domain"
-	reflect "reflect"
 )
 
 // MockUserRepository is a mock of UserRepository interface.
@@ -93,15 +94,15 @@ func (mr *MockUserRepositoryMockRecorder) GetAll() *gomock.Call {
 }
 
 // Authenticate mocks base method.
-func (m *MockUserRepository) Authenticate(arg0 domain.User) error {
+func (m *MockUserRepository) Authenticate(arg0, arg1 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Authenticate", arg0)
+	ret := m.ctrl.Call(m, "Authenticate", arg0, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Authenticate indicates an expected call of Authenticate.
-func (mr *MockUserRepositoryMockRecorder) Authenticate(arg0 interface{}) *gomock.Call {
+func (mr *MockUserRepositoryMockRecorder) Authenticate(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticate", reflect.TypeOf((*MockUserRepository)(nil).Authenticate), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticate", reflect.TypeOf((*MockUserRepository)(nil).Authenticate), arg0, arg1)
 }

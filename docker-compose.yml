@@ -13,7 +13,7 @@ services:
     build: ./docker/golang
     container_name: dchat-server
     working_dir: "/.go/src/github.com/kindai-csg/D-Chat/"
-    command: bash
+    command: /.go/bin/fresh
     ports:
       - "8180:3000"
     volumes:
@@ -23,6 +23,7 @@ services:
       - mongodb 
   mongodb:
     image: mongo:4.2.8
+    container_name: dchat-mongodb
     environment:
       - "ME_CONFIG_MONGODB_ADMINUSERNAME=root"
       - "ME_CONFIG_MONGODB_ADMINPASSWORD=example"
