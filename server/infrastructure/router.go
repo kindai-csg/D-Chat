@@ -30,6 +30,9 @@ func init() {
 	// parameter: gateway.UserInput
 	// response: gateway.UserInfoOutput
 	v1.POST("/users", func(c *gin.Context) { userController.CreateUser(c) })
+	// parameter: gateway.GroupInput
+	// response: gateway.StatusMessageOutput
+	v1.POST("/groups", func(c *gin.Context) { messageController.CreateGroup(c) })
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
