@@ -19,6 +19,7 @@ func init() {
 
 	userController := controller.NewUserController(logger, mongoHandler)
 	tokenController := controller.NewTokenController(logger, jwt, mongoHandler)
+	messageController := controller.NewMessageController(logger, mongoHandler)
 
 	// ------------------------------
 	// api v1

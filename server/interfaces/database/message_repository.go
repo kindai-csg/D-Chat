@@ -24,21 +24,10 @@ func NewMessageRepository(mongoHandler MongoHandler) *MessageRepository {
 	return &messageRepository
 }
 
-func (repository *UserRepository) createIndex() {
-	repository.mongoHandler.CreateIndex(repository.collectionName, []KV{{"user_id", 1}}, []KV{{"unique", true}})
-	repository.mongoHandler.CreateIndex(repository.collectionName, []KV{{"mail", 1}}, []KV{{"unique", true}})
-}
-
 func (repository *MessageRepository) Create(message domain.Message) (domain.Message, error) {
 	doc := []KV{
-		{"user_id", message.UserId},
-		{"name", message.Name},
-		{"password", message.Password},
-		{"mail", message.Mail},
-		{"bio", message.Bio},
 		{"status", message.Status},
-		{"status_text", message.StatusText},
-		{"auth", message.Auth},
+		{"message", message.Message}
 	}
 	id, err := repository.mongoHandler.Insert(repository.collectionName, doc)
 	message.Id = id
