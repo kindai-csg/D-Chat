@@ -15,3 +15,10 @@ func NewMessageInteractor(messageRepository MessageRepository) *MessageInteracto
 	return &messageInteractor
 }
 
+func (interactor *MessageInteractor) Create(message domain.Message) (domain.Message, error) {
+	u, err := interactor.MessageRepository.Create(message)
+	if err != nil {
+		return domain.Message{}, err
+	}
+	return u, nil
+}
