@@ -14,12 +14,12 @@ import (
 // MockUserRepository is a mock of UserRepository interface.
 type MockChannelRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockUserRepositoryMockRecorder
+	recorder *MockChannelRepositoryMockRecorder
 }
 
 // MockUserRepositoryMockRecorder is the mock recorder for MockUserRepository.
 type MockChannelRepositoryMockRecorder struct {
-	mock *MockUserRepository
+	mock *MockChannelRepository
 }
 
 // NewMockUserRepository creates a new mock instance.
@@ -29,13 +29,15 @@ func NewMockChannelRepository(ctrl *gomock.Controller) *MockChannelRepository {
 	return mock
 }
 
+/*
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockChannelRepository) EXPECT() *MockChannelRepositoryMockRecorder {
 	return m.recorder
 }
+*/
 
 // Create mocks base method.
-func (m *MockChannelRepository) Create(arg0 domain.User) (domain.User, error) {
+func (m *MockChannelRepository) Create(arg0 domain.Channel) (domain.Channel, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0)
 	ret0, _ := ret[0].(domain.Channel)
@@ -49,6 +51,7 @@ func (mr *MockChannelRepositoryMockRecorder) Create(arg0 interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockChannelRepository)(nil).Create), arg0)
 }
 
+/*
 // Update mocks base method.
 func (m *MockChannelRepository) Update(arg0 domain.Channel) (domain.Channel, error) {
 	m.ctrl.T.Helper()
@@ -92,3 +95,4 @@ func (mr *MockChannelRepositoryMockRecorder) GetAll() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockChannelRepository)(nil).GetAll))
 }
+*/

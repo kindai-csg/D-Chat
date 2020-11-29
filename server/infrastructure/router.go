@@ -32,6 +32,8 @@ func init() {
 	// response: gateway.UserInfoOutput
 	v1.POST("/users", func(c *gin.Context) { userController.CreateUser(c) })
 
+	v1.POST("/channels", func(c *gin.Context) { channelController.CreateChannel(c) })
+
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"msg": "hello world",

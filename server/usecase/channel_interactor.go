@@ -23,6 +23,7 @@ func (interactor *ChannelInteractor) CreateChannel(channel domain.Channel) (doma
 	return u, nil
 }
 
+/*
 func (interactor *ChannelInteractor) DeleteChannel(channel domain.Channel) error {
 	err := interactor.ChannelRepository.Delete(channel)
 	if err != nil {
@@ -38,3 +39,4 @@ func (interactor *ChannelInteractor) UpdateChannel(channel domain.Channel) (doma
 	}
 	return u, nil
 }
+*/

@@ -9,32 +9,30 @@ import (
 
 type ChannelController struct {
 	logger     interfaces.Logger
-	interactor usecase.UserInteractor
+	interactor usecase.ChannelInteractor
 }
 
 func NewChannelController(logger interfaces.Logger, mongoHandler database.MongoHandler) *ChannelController {
-	channelContoroller := ChannelContoroller{
-		logger : logger,
+	channelContoroller := ChannelController{
+		logger:     logger,
 		interactor: *usecase.NewChannelInteractor(database.NewChannelRepository(mongoHandler)),
 	}
 	return &channelContoroller
 }
 
-func (contoroller *ChannelController) CreateChannel(c Context){
-	func (controller *UserController) CreateUser(c Context) {
-		input := gateway.UserInput{}
-		err := c.ShouldBindJSON(&input)
-		if err != nil {
-			controller.logger.Error(err.Error())
-			c.JSON(400, gateway.StatusMessageOutput{false, "Parameter is invalid."})
-			return
-		}
-		user, err := controller.interactor.Create(input.GetUser())
-		if err != nil {
-			controller.logger.Error(err.Error())
-			c.JSON(500, gateway.StatusMessageOutput{false, "Failed to create account."})
-			return
-		}
-		c.JSON(200, gateway.CreateUserInfoOutputFromUser(user))
+func (controller *ChannelController) CreateChannel(c Context) {
+	input := gateway.ChannelInput{}
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		controller.logger.Error(err.Error())
+		c.JSON(400, gateway.StatusMessageOutput{false, "Parameter is invalid."})
+		return
 	}
+	channel, err := controller.interactor.CreateChannel(input.GetChannel())
+	if err != nil {
+		controller.logger.Error(err.Error())
+		c.JSON(500, gateway.StatusMessageOutput{false, "Failed to create account."})
+		return
+	}
+	c.JSON(200, gateway.CreateChannelInfoOutputFromChannel(channel))
 }

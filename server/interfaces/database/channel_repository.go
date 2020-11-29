@@ -9,7 +9,7 @@ type ChannelRepository struct {
 	collectionName string
 }
 
-func NewChannellRepository(mongohandler MongoHandler) *ChannelRepository {
+func NewChannelRepository(mongoHandler MongoHandler) *ChannelRepository {
 	channelRepository := ChannelRepository{
 		mongoHandler:   mongoHandler,
 		collectionName: "Channel",
@@ -19,15 +19,15 @@ func NewChannellRepository(mongohandler MongoHandler) *ChannelRepository {
 
 func (repository *ChannelRepository) Create(channel domain.Channel) (domain.Channel, error) {
 	doc := []KV{
-		{"id", channel.ChannelId},
-		{"name", channel.ChannelName},
-		{"concept", channel.ChannelConcept},
+		{"name", channel.Name},
+		{"concept", channel.Concept},
 	}
 	id, err := repository.mongoHandler.Insert(repository.collectionName, doc)
 	channel.Id = id
 	return channel, err
 }
 
+/*
 func (repository *ChannelRepository) Update(channel domain.Channel) (domain.Channel, error) {
 	query := []KV{
 		{"_id", channel.Id},
@@ -72,3 +72,4 @@ func (repository *ChannelRepository) GetAll() ([]domain.collectionName, error) {
 	}
 	return channels, nil
 }
+*/

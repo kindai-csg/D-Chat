@@ -5,17 +5,15 @@ import (
 )
 
 type ChannelInput struct {
-	Id             string `json:"id"`
-	ChannelId      string `json:"channel_id"`
-	ChannelName    string `jason:"channel_name"`
-	ChannelConcept string `json:"channel_concept"`
+	Id      string `json:"id"`
+	Name    string `jason:"name"`
+	Concept string `json:"concept"`
 }
 
 func (channel *ChannelInput) GetChannel() domain.Channel {
 	return domain.Channel{
-		Id:             channel.Id,
-		ChannelId:      channel.ChannelId,
-		ChannelName:    channel.ChannelName,
-		ChannelConcept: channel.ChannelConcept,
+		Id:      channel.Id,
+		Name:    channel.Name,
+		Concept: channel.Concept,
 	}
 }
