@@ -18,6 +18,7 @@ func init() {
 	jwt := NewTokenJwt("secret", 24)
 
 	userController := controller.NewUserController(logger, mongoHandler)
+	channelController := controller.NewChannelController(logger, mongoHandler)
 	tokenController := controller.NewTokenController(logger, jwt, mongoHandler)
 
 	// ------------------------------
