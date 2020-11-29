@@ -6,37 +6,26 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/kindai-csg/D-Chat/domain"
-	"github.com/kindai-csg/D-Chat/interfaces/database"
-	mock "github.com/kindai-csg/D-Chat/test/mock_database"
+	mock "github.com/kindai-csg/D-Chat/test/mock_usecase"
+	"github.com/kindai-csg/D-Chat/usecase"
 )
 
-func createChannelIndex(m *mock.MockMongoHandler) {
-	m.EXPECT().CreateIndex(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
-	m.EXPECT().CreateIndex(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
-}
-
-func TestChannelCreate(t *testing.T) {
+func TestChannelInteractorCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mongoHandler := mock.NewMockMongoHandler(ctrl)
-	createUsersIndex(mongoHandler)
-	repository := database.NewChannelRepository(mongoHandler)
+	channelRepository := mock.NewMockChannelRepository(ctrl)
+	interactor := usecase.NewChannelInteractor(channelRepository)
 
-	collectionName := "Users"
-	argChannel := domain.Channel{}
-	id := "test"
-	mongoHandler.EXPECT().Insert(collectionName, gomock.Any()).Return(id, nil)
-	u, err := repository.Create(argChannel)
-	if err != nil {
-		t.Errorf("Expectation: return nil")
-	}
-	if u.Id != id {
-		t.Errorf("Expectation: id is test")
-	}
-
-	mongoHandler.EXPECT().Insert(collectionName, gomock.Any()).Return(id, errors.New(""))
-	_, err = repository.Create(argChannel)
+	channel := domain.Channel{}
+	channelRepository.EXPECT().Create(channel).Return(channel, errors.New(""))
+	_, err := interactor.CreateChannel(channel)
 	if err == nil {
 		t.Errorf("Expectation: return error")
+	}
+
+	channelRepository.EXPECT().Create(channel).Return(channel, nil)
+	_, err = interactor.CreateChannel(channel)
+	if err != nil {
+		t.Errorf("Expectation: return nil")
 	}
 }

@@ -29,12 +29,10 @@ func NewMockChannelRepository(ctrl *gomock.Controller) *MockChannelRepository {
 	return mock
 }
 
-/*
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockChannelRepository) EXPECT() *MockChannelRepositoryMockRecorder {
 	return m.recorder
 }
-*/
 
 // Create mocks base method.
 func (m *MockChannelRepository) Create(arg0 domain.Channel) (domain.Channel, error) {
