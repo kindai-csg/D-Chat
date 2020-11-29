@@ -1,7 +1,7 @@
 package domain
 
 type Group struct {
-	groupName    string
-	aboutGroup   string
-	participants string
+	Name         string
+	About        string
+	Participants string
 }

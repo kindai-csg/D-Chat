@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/kindai-csg/D-chat/domain"
+	"github.com/kindai-csg/D-Chat/domain"
 )
 
 type GroupRepository struct {
@@ -19,9 +19,9 @@ func NewGroupRepository(mongoHandler MongoHandler) *GroupRepository {
 
 func (repository *GroupRepository) Create(group domain.Group) (domain.Group, error) {
 	doc := []KV{
-		{"groupname", group.groupName},
-		{"aboutgroup", group.aboutGroup},
-		{"participants", group.participants},
+		{"Name", group.Name},
+		{"About", group.About},
+		{"Participants", group.Participants},
 	}
 
 	_, err := repository.mongoHandler.Insert(repository.collectionName, doc)

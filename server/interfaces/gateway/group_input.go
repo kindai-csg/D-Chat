@@ -5,15 +5,15 @@ import (
 )
 
 type GroupInput struct {
-	groupName    string `json:"groupname"`
-	aboutGroup   string `json;"aboutgroup"`
-	participants string `json:"participants"`
+	Name         string `json:"name"`
+	About        string `json:"about"`
+	Participants string `json:"participants"`
 }
 
 func (group *GroupInput) GetGroup() domain.Group {
 	return domain.Group{
-		groupName:    group.groupName,
-		aboutGroup:   group.aboutGroup,
-		participants: group.participants,
+		Name:         group.Name,
+		About:        group.About,
+		Participants: group.Participants,
 	}
 }

@@ -8,11 +8,11 @@ import (
 )
 
 type GroupController struct {
-	logger     interfaces.logger
+	logger     interfaces.Logger
 	interactor usecase.GroupInteractor
 }
 
-func NewGroupController(logger interfaces.Logger, mongoHandler database.ongoHandler) *GroupController {
+func NewGroupController(logger interfaces.Logger, mongoHandler database.MongoHandler) *GroupController {
 	groupController := GroupController{
 		logger:     logger,
 		interactor: *usecase.NewGroupInteractor(database.NewGroupRepository(mongoHandler)),
@@ -25,14 +25,14 @@ func (controller *GroupController) CreateGroup(c Context) {
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
 		controller.logger.Error(err.Error())
-		c.JSON(400, gateway.StatusGroupOutput{false, "Parameter is vailed."})
+		c.JSON(400, gateway.StatusMessageOutput{false, "Parameter is vailed."})
 		return
 	}
 	_, err = controller.interactor.Create(input.GetGroup())
 	if err != nil {
 		controller.logger.Error(err.Error())
-		c.JSON(500, gateway.StatusGroupOutput{false, "Failed to create group"})
+		c.JSON(500, gateway.StatusMessageOutput{false, "Failed to create group"})
 		return
 	}
-	c.JSON(200, gateway.StatusGroupOutput{true, "success!"})
+	c.JSON(200, gateway.StatusMessageOutput{true, "success!"})
 }

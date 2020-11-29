@@ -18,6 +18,7 @@ func init() {
 	jwt := NewTokenJwt("secret", 24)
 
 	userController := controller.NewUserController(logger, mongoHandler)
+	groupController := controller.NewGroupController(logger, mongoHandler)
 	tokenController := controller.NewTokenController(logger, jwt, mongoHandler)
 
 	// ------------------------------
@@ -32,7 +33,7 @@ func init() {
 	v1.POST("/users", func(c *gin.Context) { userController.CreateUser(c) })
 	// parameter: gateway.GroupInput
 	// response: gateway.StatusMessageOutput
-	v1.POST("/groups", func(c *gin.Context) { messageController.CreateGroup(c) })
+	v1.POST("/groups", func(c *gin.Context) { groupController.CreateGroup(c) })
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
