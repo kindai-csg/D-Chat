@@ -5,5 +5,13 @@ import {
 }
 
 type MessageInteractor struct{
-	MessageRepository
+	MessageRepository MessageRepository
 }
+
+func NewMessageInteractor(messageRepository MessageRepository) *MessageInteractor {
+	messageInteractor := MessageInteractor{
+		MessageRepository: messageRepository,
+	}
+	return &messageInteractor
+}
+
