@@ -23,7 +23,7 @@ func TestChannelCreate(t *testing.T) {
 	//createUsersIndex(mongoHandler)
 	repository := database.NewChannelRepository(mongoHandler)
 
-	collectionName := "Channels"
+	collectionName := "Channelsmk"
 	argChannel := domain.Channel{}
 	id := "test"
 	mongoHandler.EXPECT().Insert(collectionName, gomock.Any()).Return(id, nil)
