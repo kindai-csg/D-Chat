@@ -16,7 +16,7 @@ func TestGroupInteractorCreate(t *testing.T) {
 	groupRepository := mock.NewMockGroupRepository(ctrl)
 	interactor := usecase.NewGroupInteractor(groupRepository)
 
-	group := domain.Group()
+	group := domain.Group{}
 	groupRepository.EXPECT().Create(group).Return(group, errors.New(""))
 
 	_, err := interactor.Create(group)
