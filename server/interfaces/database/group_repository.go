@@ -19,9 +19,9 @@ func NewGroupRepository(mongoHandler MongoHandler) *GroupRepository {
 
 func (repository *GroupRepository) Create(group domain.Group) (domain.Group, error) {
 	doc := []KV{
-		{"Name", group.Name},
-		{"About", group.About},
-		{"Participants", group.Participants},
+		{"name", group.Name},
+		{"about", group.About},
+		{"participants", group.Participants},
 	}
 
 	_, err := repository.mongoHandler.Insert(repository.collectionName, doc)
