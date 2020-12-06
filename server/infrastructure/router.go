@@ -18,7 +18,11 @@ func init() {
 	jwt := NewTokenJwt("secret", 24)
 
 	userController := controller.NewUserController(logger, mongoHandler)
+
+	channelController := controller.NewChannelController(logger, mongoHandler)
+
 	messageController := controller.NewMessageController(logger, mongoHandler)
+
 	tokenController := controller.NewTokenController(logger, jwt, mongoHandler)
 
 	// ------------------------------
@@ -34,6 +38,8 @@ func init() {
 	// parameter: gateway.MessageInput
 	// response: gateway.StatusMessageOutput
 	v1.POST("/messages", func(c *gin.Context) { messageController.CreateMessage(c) })
+
+	v1.POST("/channels", func(c *gin.Context) { channelController.CreateChannel(c) })
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
