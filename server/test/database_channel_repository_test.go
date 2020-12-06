@@ -10,19 +10,20 @@ import (
 	mock "github.com/kindai-csg/D-Chat/test/mock_database"
 )
 
+/*
 func createChannelIndex(m *mock.MockMongoHandler) {
 	m.EXPECT().CreateIndex(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 	m.EXPECT().CreateIndex(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 }
-
+*/
 func TestChannelCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mongoHandler := mock.NewMockMongoHandler(ctrl)
-	createUsersIndex(mongoHandler)
+	//createUsersIndex(mongoHandler)
 	repository := database.NewChannelRepository(mongoHandler)
 
-	collectionName := "Users"
+	collectionName := "Channels"
 	argChannel := domain.Channel{}
 	id := "test"
 	mongoHandler.EXPECT().Insert(collectionName, gomock.Any()).Return(id, nil)
