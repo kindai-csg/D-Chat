@@ -12,7 +12,7 @@ type ChannelRepository struct {
 func NewChannelRepository(mongoHandler MongoHandler) *ChannelRepository {
 	channelRepository := ChannelRepository{
 		mongoHandler:   mongoHandler,
-		collectionName: "Channel",
+		collectionName: "Channels",
 	}
 	return &channelRepository
 }

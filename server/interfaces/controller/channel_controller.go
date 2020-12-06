@@ -31,7 +31,7 @@ func (controller *ChannelController) CreateChannel(c Context) {
 	channel, err := controller.interactor.CreateChannel(input.GetChannel())
 	if err != nil {
 		controller.logger.Error(err.Error())
-		c.JSON(500, gateway.StatusMessageOutput{false, "Failed to create account."})
+		c.JSON(500, gateway.StatusMessageOutput{false, "Failed to create a channel"})
 		return
 	}
 	c.JSON(200, gateway.CreateChannelInfoOutputFromChannel(channel))
