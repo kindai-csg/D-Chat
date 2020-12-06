@@ -2,7 +2,7 @@ package gateway
 
 import "github.com/kindai-csg/D-Chat/domain"
 
-type UserInfoOutput struct {
+type GroupInfoOutput struct {
 	Name         string `json:"name"`
 	About        string `json:"about"`
 	Participants string `json:"participants"`

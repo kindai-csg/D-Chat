@@ -28,7 +28,7 @@ func (controller *GroupController) CreateGroup(c Context) {
 		c.JSON(400, gateway.StatusMessageOutput{false, "Parameter is vailed."})
 		return
 	}
-	group, err = controller.interactor.Create(input.GetGroup())
+	group, err := controller.interactor.Create(input.GetGroup())
 	if err != nil {
 		controller.logger.Error(err.Error())
 		c.JSON(500, gateway.StatusMessageOutput{false, "Failed to create group"})
