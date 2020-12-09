@@ -17,7 +17,14 @@ services:
     ports:
       - "8180:3000"
     volumes:
-      - "./server:/.go/src/github.com/kindai-csg/D-Chat/"
+      - "./infrastructure:/.go/src/github.com/kindai-csg/D-Chat/infrastructure"
+      - "./interfaces:/.go/src/github.com/kindai-csg/D-Chat/interfaces"
+      - "./usecase:/.go/src/github.com/kindai-csg/D-Chat/usecase"
+      - "./domain:/.go/src/github.com/kindai-csg/D-Chat/domain"
+      - "./test:/.go/src/github.com/kindai-csg/D-Chat/test"
+      - "./go.mod:/.go/src/github.com/kindai-csg/D-Chat/go.mod"
+      - "./go.sum:/.go/src/github.com/kindai-csg/D-Chat/go.sum"
+      - "./main.go:/.go/src/github.com/kindai-csg/D-Chat/main.go"
     tty: true
     depends_on: 
       - mongodb 
