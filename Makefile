@@ -8,3 +8,4 @@ log:
 	docker-compose logs -f
 test:
 	docker-compose exec server go test -v ./test
+.PHONY: test
